@@ -12,6 +12,9 @@ exposes the raw results from the API server (including errors).
 This can be particularly helpful when working with non-Amazon
 EC2 API implementations like OpenStack Nova.
 
+This script uses Digest::SHA and URI::Escape to do it's dirty
+work, so you'll need those perl modules.
+
 Some command examples:
 
 	Add a KeyPair named mykeypair:
@@ -25,6 +28,10 @@ Some command examples:
 
 And example output:
 
+
+$ export EC2_URL="https://ec2.amazonaws.com/"
+$ export EC2_ACCESS_KEY="123456789"
+$ export EC2_SECRET_KEY="ABCDEFGHI"
 $ ./ec2_signer.pl -r -p Action=DescribeKeyPairs
 Command
 -------
