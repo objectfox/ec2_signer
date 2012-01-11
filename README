@@ -1,9 +1,9 @@
 ec2_signer.pl
 -------------
 
-ec2_signer is a simple perl script that signs EC2 API requests
-and optionally makes those requests to endpoints and prints the
-results, optionally feeding the XML through xmllint to provide
+ec2_signer is a simple perl script that signs EC2 API requests.
+It can also make those requests to endpoints and print the
+results, optionally piping the XML through xmllint to provide
 greater readability.
 
 It's particularly useful for manipulating the EC2 API directly,
