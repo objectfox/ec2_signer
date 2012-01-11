@@ -1,0 +1,47 @@
+ec2_signer.pl
+-------------
+
+ec2_signer is a simple perl script that signs EC2 API requests
+and optionally makes those requests to endpoints and prints the
+results, optionally feeding the XML through xmllint to provide
+greater readability.
+
+It's particularly useful for manipulating the EC2 API directly,
+since it takes care of the signing part of the process but still
+exposes the raw results from the API server (including errors).
+This can be particularly helpful when working with non-Amazon
+EC2 API implementations like OpenStack Nova.
+
+Some command examples:
+
+	Add a KeyPair named mykeypair:
+	ec2_signer.pl Action=CreateKeyPair KeyName=newkeypair
+	
+	List Instances:
+	ec2_signer.pl Action=DescribeInstances
+
+	Associate Address with Instance:
+	ec2_signer.pl Action=AssociateAddress PublicIp=1.1.1.1 InstanceId=xyz
+
+And example output:
+
+$ ./ec2_signer.pl -r -p Action=DescribeKeyPairs
+Command
+-------
+curl "https://ec2.amazonaws.com/?AWSAccessKeyId=123456&
+Action=DescribeKeyPairs&SignatureMethod=HmacSHA256&SignatureVersion=2&
+Timestamp=2012-01-11T19%3A31%3A59.000Z&Version=2011-05-15&Signature=123456="
+
+Response
+--------
+<?xml version="1.0" encoding="UTF-8"?>
+<DescribeKeyPairsResponse xmlns="http://ec2.amazonaws.com/doc/2011-05-15/">
+  <requestId>12345-12345-123456</requestId>
+  <keySet>
+    <item>
+      <keyName>mykeypair</keyName>
+      <keyFingerprint>ab:cd:ef:gh:ig:ha</keyFingerprint>
+    </item>
+  </keySet>
+</DescribeKeyPairsResponse>
+
