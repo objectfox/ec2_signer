@@ -61,9 +61,11 @@ def make_request(url):
 def make_request_pretty(url):
 	return xml.dom.minidom.parse(urllib.urlopen(url)).toprettyxml()
 
-# Parse our arguments.
-
-parser = argparse.ArgumentParser(
+if __name__ == '__main__':
+	
+	# Parse our arguments.
+	
+	parser = argparse.ArgumentParser(
 		formatter_class=argparse.RawDescriptionHelpFormatter,
 		description='''
 Sign and optionally request responses from EC2 API endpoints.
@@ -77,40 +79,41 @@ examples:
 
   Associate Address with Instance:
   ec2_signer.py Action=AssociateAddress PublicIp=1.1.1.1 InstanceId=xyz''',
-		epilog="note:\n  EC2_ACCESS_KEY, EC2_SECRET_KEY and EC2_URL environment\n"+
+		epilog="note:\n"+
+		"  EC2_ACCESS_KEY, EC2_SECRET_KEY and EC2_URL environment\n"+
 		"  variables must be set.")
-parser.add_argument('arguments', metavar='n=v', type=str, nargs='+',
+	parser.add_argument('arguments', metavar='n=v', type=str, nargs='+',
 		help="name=value pairs for request")
-parser.add_argument('-r',dest='request', action='store_true',
+	parser.add_argument('-r',dest='request', action='store_true',
 		help='make the request and print the response')
-parser.add_argument('-p',dest='request_pretty', action='store_true',
+	parser.add_argument('-p',dest='request_pretty', action='store_true',
 		help='make the request and pretty print response')
-args = parser.parse_args()
-
-# Ensure our environment variables are set.
-
-required_env = ("EC2_ACCESS_KEY","EC2_SECRET_KEY","EC2_URL")
-
-for env in required_env:
-	if not os.getenv(env):
-		print "Error:", env, "environment variable must be set."
-		raise SystemExit
-
-# Do the work.
-
-signed_url = sign_url(args.arguments,os.getenv("EC2_URL"),
+	args = parser.parse_args()
+	
+	# Ensure our environment variables are set.
+	
+	required_env = ("EC2_ACCESS_KEY","EC2_SECRET_KEY","EC2_URL")
+	
+	for env in required_env:
+		if not os.getenv(env):
+			print "Error:", env, "environment variable must be set."
+			raise SystemExit
+	
+	# Do the work.
+	
+	signed_url = sign_url(args.arguments,os.getenv("EC2_URL"),
 		os.getenv('EC2_ACCESS_KEY'),os.getenv("EC2_SECRET_KEY"))
-
-if args.request:
-	print "Signed URL\n--------"
-	print signed_url
-	print "\nResponse\n--------"
-	print make_request(signed_url)
-elif args.request_pretty:
-	print "Signed URL\n--------"
-	print signed_url
-	print "\nResponse\n--------"
-	print make_request_pretty(signed_url)
-else:
-	print signed_url
+	
+	if args.request:
+		print "Signed URL\n--------"
+		print signed_url
+		print "\nResponse\n--------"
+		print make_request(signed_url)
+	elif args.request_pretty:
+		print "Signed URL\n--------"
+		print signed_url
+		print "\nResponse\n--------"
+		print make_request_pretty(signed_url)
+	else:
+		print signed_url
 
