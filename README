@@ -1,7 +1,7 @@
-ec2_signer.pl
--------------
+ec2_signer.pl & ec2_signer.py
+-----------------------------
 
-ec2_signer is a simple perl script that signs EC2 API requests.
+ec2_signer is a simple script that signs EC2 API requests.
 It can also make those requests to endpoints and print the
 results, optionally piping the XML through xmllint to provide
 greater readability.
@@ -12,7 +12,7 @@ exposes the raw results from the API server (including errors).
 This can be particularly helpful when working with non-Amazon
 EC2 API implementations like OpenStack Nova.
 
-This script uses Digest::SHA and URI::Escape to do it's dirty
+The perl version uses Digest::SHA and URI::Escape to do it's dirty
 work, so you'll need those perl modules.
 
 Some command examples:
@@ -51,4 +51,3 @@ Response
     </item>
   </keySet>
 </DescribeKeyPairsResponse>
-
